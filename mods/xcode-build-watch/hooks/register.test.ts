@@ -8,9 +8,10 @@ const done = (stdout: string, exitCode = 0, stderr = ''): ProcessRunResult => ({
 const entries = (...names: string[]) => names.map(name => ({ name, kind: name.includes('.') ? 'file' : 'dir' }) as FsEntry)
 
 // /dev/App holds App.xcodeproj; /dev/Pkg holds Package.swift. Every command run is logged.
-function world(on: On, build: ProcessRunResult) {
+function world(on: On, build: ProcessRunResult | (() => ProcessRunResult)) {
   const runs: string[][] = []
   const clock = mock.clock(on, { now: 0 })
+  on('session.cwd', () => ({ value: '/dev' }))
   on('fs.list', ($, e) => {
     const tree: Record<string, FsEntry[]> = {
       '/dev/App': entries('App.xcodeproj', 'Sources'),
@@ -27,7 +28,7 @@ function world(on: On, build: ProcessRunResult) {
   on('process.run', ($, e) => {
     runs.push([...e.argv])
     if (e.argv.includes('-list')) return { value: done(JSON.stringify({ project: { schemes: ['AppTests', 'App'] } })) }
-    return { value: build }
+    return { value: typeof build === 'function' ? build() : build }
   })
   on('tool.call', () => ({ result: 'ok' as never }))
   on('turn.complete', ($, e) => ({ text: e.answer }))
@@ -88,4 +89,21 @@ test('beside Finder copies like "Dup 2.xcodeproj", the project named after its f
   await turnEditing($, clock, '/dev/Dup/Sources/b.swift')
 
   expect(runs.find(argv => argv.at(-1) === 'build')?.[2]).toBe('/dev/Dup/Dup.xcodeproj')
+})
+
+test("a subagent's Swift edits and Swift files outside the session's folder build nothing", async ($, on) => {
+  const { runs, clock } = world(on, done(''))
+  await $.tool.call({ tool: 'Edit', agentId: 'sub-1', file_path: '/dev/App/Sources/main.swift', old_string: 'a', new_string: 'b' } as never)
+  await turnEditing($, clock, '/elsewhere/App/Sources/main.swift')
+
+  expect(runs).toEqual([])
+})
+
+test('a build that cannot finish reports it instead of staying in progress', async ($, on) => {
+  const { clock } = world(on, () => {
+    throw new Error('timed out')
+  })
+  await turnEditing($, clock, '/dev/Pkg/Sources/lib.swift')
+
+  expect(await status($)).toContain('build did not finish')
 })

@@ -5,6 +5,8 @@ import type { BuildReport } from '../types'
 
 // A build that runs longer than this is cut off.
 const BUILD_TIMEOUT_MS = 10 * 60 * 1000
+// Listing schemes may resolve packages first.
+const LIST_TIMEOUT_MS = 2 * 60 * 1000
 const MAX_ERRORS = 20
 
 const last = atom({ plugin: 'xcode-build-watch', key: 'last' } as const, null)
@@ -38,7 +40,10 @@ async function findProject($: EngineInterface, file: string): Promise<Project | 
 
 // The scheme named like the project, else the first one xcodebuild lists.
 async function scheme($: EngineInterface, project: Extract<Project, { kind: 'xcode' }>): Promise<string | undefined> {
-  const listed = await $.process.run(['xcodebuild', '-list', '-json', project.flag, project.path], { cwd: project.root })
+  const listed = await $.process.run(['xcodebuild', '-list', '-json', project.flag, project.path], {
+    cwd: project.root,
+    timeoutMs: LIST_TIMEOUT_MS,
+  })
   if (listed.exitCode !== 0) return undefined
   try {
     const json = JSON.parse(listed.stdout) as { project?: { schemes?: string[] }; workspace?: { schemes?: string[] } }
@@ -96,7 +101,14 @@ async function run($: EngineInterface, project: Project): Promise<void> {
   running.add(project.root)
   $.ui.status(`⏳ building ${base(project.root)}…`)
   try {
-    const report = await build($, project)
+    const report = await build($, project).catch(
+      (error: unknown): BuildReport => ({
+        project: base(project.root),
+        isOk: false,
+        seconds: 0,
+        errors: [`build did not finish: ${error instanceof Error ? error.message : String(error)}`],
+      }),
+    )
     await update($, last, () => report)
     $.ui.status(describe(report))
     if (!report.isOk) $.ui.toast(`${describe(report)} — /build-status for details`)
@@ -125,8 +137,10 @@ export const register: Register = on => {
 
   on('tool.call', async ($, e, next) => {
     const ran = await next(e)
-    const path = e.tool === 'Edit' || e.tool === 'Write' ? e.file_path : undefined
+    // A subagent's edits (often in a worktree) are its own to build: each worktree build costs a DerivedData folder.
+    const path = e.agentId === undefined && (e.tool === 'Edit' || e.tool === 'Write') ? e.file_path : undefined
     if (path === undefined || !path.endsWith('.swift') || ran.deny !== undefined || ran.isError === true) return ran
+    if (!path.startsWith((await $.session.cwd()) + '/')) return ran
     const project = await findProject($, path)
     if (project !== null) pending.set(project.root, project)
 
