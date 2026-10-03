@@ -7,3 +7,4 @@ PLAN.md
 node_modules/
 .DS_Store
 .omc/
+.smoke/
