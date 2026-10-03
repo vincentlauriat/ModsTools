@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { check } from './rules'
+import { check, pushDir } from './rules'
 
 describe('refused', () => {
   const cases: [string, string | undefined][] = [
@@ -48,6 +48,22 @@ describe('allowed', () => {
   for (const [command, branch] of cases) {
     test(`${command} (on ${branch})`, () => {
       expect(check(command, branch)).toBeNull()
+    })
+  }
+})
+
+describe('the folder a push runs in', () => {
+  const cases: [string, string | undefined][] = [
+    ['git push', undefined],
+    ['cd /repo && git push', '/repo'],
+    ['cd /a; cd /repo && rtk git push origin', '/repo'],
+    ['git -C /repo push', '/repo'],
+    ['cd /a && git -C /repo push', '/repo'],
+    ['git status', undefined],
+  ]
+  for (const [command, dir] of cases) {
+    test(command, () => {
+      expect(pushDir(command)).toBe(dir)
     })
   }
 })

@@ -76,3 +76,20 @@ export function check(command: string, branch: string | undefined): string | nul
 }
 
 export const mentionsPush = (command: string) => /\bpush\b/.test(command)
+
+/**
+ * The folder the first `git push` of the line runs in: its `git -C` folder,
+ * else the last `cd` before it; undefined for the session's own folder.
+ */
+export function pushDir(command: string): string | undefined {
+  let dir: string | undefined
+  for (const words of segments(command)) {
+    if (words[0] === 'cd' && words[1] !== undefined) dir = words[1]
+    if (gitArgs(words)?.[0] !== 'push') continue
+    const at = words.indexOf('-C')
+
+    return at > 0 && at < words.indexOf('push') ? words[at + 1] : dir
+  }
+
+  return undefined
+}

@@ -1,12 +1,12 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import { check, mentionsPush } from './rules'
+import { check, mentionsPush, pushDir } from './rules'
 
 const isOff = atom({ plugin: 'main-guard', key: 'isOff' } as const, false)
 
-async function currentBranch($: EngineInterface): Promise<string | undefined> {
-  const ran = await $.process.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])
+async function currentBranch($: EngineInterface, dir: string | undefined): Promise<string | undefined> {
+  const ran = await $.process.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], dir === undefined ? undefined : { cwd: dir })
 
   return ran.exitCode === 0 ? ran.stdout.trim() : undefined
 }
@@ -34,7 +34,7 @@ export const register: Register = on => {
 
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
     if (await read($, isOff)) return next(e)
-    const branch = mentionsPush(e.command) ? await currentBranch($) : undefined
+    const branch = mentionsPush(e.command) ? await currentBranch($, pushDir(e.command)) : undefined
     const reason = check(e.command, branch)
     if (reason === null) return next(e)
     $.ui.toast(`main-guard blocked: ${reason}`)

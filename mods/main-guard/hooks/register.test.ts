@@ -49,3 +49,20 @@ test('/main-guard off lets the push through, /main-guard on blocks it again', as
   await $.tool.call({ tool: 'Bash', command: 'git push origin main' })
   expect(ran).toBe(1)
 })
+
+test('a bare push after cd reads the branch of that folder', async ($, on) => {
+  let ran = 0
+  const asked: (string | undefined)[] = []
+  on('process.run', ($e, e) => {
+    asked.push(e.init?.cwd)
+    return { value: git(e.init?.cwd === '/repo' ? 'main\n' : 'feat/x\n') }
+  })
+  on('tool.call', () => {
+    ran += 1
+    return { result: 'ok' as never }
+  })
+
+  await $.tool.call({ tool: 'Bash', command: 'cd /repo && git push' })
+  expect(asked).toEqual(['/repo'])
+  expect(ran).toBe(0)
+})
