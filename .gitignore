@@ -1,0 +1,9 @@
+COMMANDS.md
+MEMORY.md
+CHANGES.md
+TODOS.md
+PLAN.md
+.claude-plugin/types/
+node_modules/
+.DS_Store
+.omc/

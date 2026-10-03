@@ -1,0 +1,6 @@
+{
+  "name": "changed-files",
+  "version": "0.1.0",
+  "description": "A pane listing the files Claude modified during the session",
+  "types": "./types/index.d.ts"
+}
