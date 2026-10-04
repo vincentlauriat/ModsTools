@@ -1,0 +1,6 @@
+{
+  "name": "french-guard",
+  "version": "0.1.0",
+  "description": "Toasts when the last answer looks English or is French written without accents; /french-guard off|on|status",
+  "types": "./types/index.d.ts"
+}

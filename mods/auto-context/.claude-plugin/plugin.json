@@ -1,0 +1,6 @@
+{
+  "name": "auto-context",
+  "version": "0.1.0",
+  "description": "Adds git branch, dirty count, last commit and next TODOS to the session's system prompt",
+  "types": "./types/index.d.ts"
+}

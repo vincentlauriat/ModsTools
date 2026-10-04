@@ -1,0 +1,6 @@
+{
+  "name": "focus-mode",
+  "version": "0.1.0",
+  "description": "A pomodoro: /focus [minutes] starts it, a band above the prompt counts down, a toast ends it",
+  "types": "./types/index.d.ts"
+}
