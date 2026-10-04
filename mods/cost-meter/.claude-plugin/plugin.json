@@ -1,0 +1,13 @@
+{
+  "name": "cost-meter",
+  "version": "0.1.0",
+  "description": "Session cost and rate-limit usage in the status line; toasts when the cost crosses a threshold; /cost-meter summary",
+  "userConfig": {
+    "thresholdUsd": {
+      "type": "number",
+      "title": "Cost alert threshold (USD)",
+      "description": "Toast once when the session cost crosses this amount",
+      "default": 5
+    }
+  }
+}
