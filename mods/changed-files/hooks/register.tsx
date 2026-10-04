@@ -22,6 +22,44 @@ async function record($: EngineInterface, path: string, tool: string) {
   })
 }
 
+// Above this many dirty paths, a snapshot is skipped rather than hashing them all.
+const SNAPSHOT_LIMIT = 2000
+
+const split = (stdout: string) => stdout.split('\0').filter(Boolean)
+
+// The repo's dirty, untracked and deleted files, absolute path → content hash
+// ('deleted' for a removed file); null outside a git repository.
+async function snapshot($: EngineInterface): Promise<Map<string, string> | null> {
+  const top = await $.process.run(['git', 'rev-parse', '--show-toplevel'])
+  if (top.exitCode !== 0) return null
+  const root = top.stdout.trim()
+  const listed = await $.process.run(
+    ['git', 'ls-files', '-z', '-m', '-o', '-d', '--exclude-standard'],
+    { cwd: root },
+  )
+  const gone = await $.process.run(['git', 'ls-files', '-z', '-d'], { cwd: root })
+  if (listed.exitCode !== 0 || gone.exitCode !== 0) return null
+  const deleted = new Set(split(gone.stdout))
+  const present = [...new Set(split(listed.stdout))].filter(path => !deleted.has(path))
+  if (present.length + deleted.size > SNAPSHOT_LIMIT) return null
+
+  const files = new Map<string, string>()
+  for (const path of deleted) files.set(`${root}/${path}`, 'deleted')
+  if (present.length === 0) return files
+  const absolute = present.map(path => `${root}/${path}`)
+  const hashed = await $.process.run(['git', 'hash-object', '--', ...absolute], { cwd: root })
+  if (hashed.exitCode !== 0) return null
+  const hashes = hashed.stdout.trim().split('\n')
+  absolute.forEach((path, i) => files.set(path, hashes[i] ?? ''))
+
+  return files
+}
+
+const changedBetween = (before: Map<string, string>, after: Map<string, string>) => [
+  ...[...after].filter(([path, hash]) => before.get(path) !== hash).map(([path]) => path),
+  ...[...before.keys()].filter(path => !after.has(path)),
+]
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
@@ -57,6 +95,17 @@ export const register: Register = on => {
   on('tool.call', { tool: 'NotebookEdit' }, async ($, e, next) => {
     const ran = await next(e)
     if (ran.deny === undefined && ran.isError !== true) await record($, e.notebook_path, 'NotebookEdit')
+
+    return ran
+  })
+
+  on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
+    const before = await snapshot($)
+    const ran = await next(e)
+    if (before === null || ran.deny !== undefined) return ran
+    const after = await snapshot($)
+    if (after === null) return ran
+    for (const path of changedBetween(before, after)) await record($, path, 'Bash')
 
     return ran
   })
