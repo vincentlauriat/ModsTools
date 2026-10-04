@@ -1,0 +1,13 @@
+{
+  "name": "ascii-weather",
+  "version": "0.1.0",
+  "description": "Weather from wttr.in in the status line (refreshed at most once an hour); /weather shows the one-line forecast",
+  "userConfig": {
+    "location": {
+      "type": "string",
+      "title": "Location",
+      "description": "City or place name for wttr.in; empty lets wttr.in guess from your IP",
+      "default": ""
+    }
+  }
+}

@@ -34,6 +34,10 @@ A collection of Claude Code mods (plugins of function hooks).
 | [`focus-mode`](mods/focus-mode) | Pomodoro: `/focus [minutes]` (default 25) shows a countdown band, toast + Dismiss at the end; `/focus stop`. |
 | [`done-sound`](mods/done-sound) | Plays a short original chime when a main turn took ≥ 30 s (`minSeconds` option). `/done-sound off\|on\|test`. |
 | [`french-guard`](mods/french-guard) | After each answer, toasts when it looks English or contains ≥ 3 French words missing their accents (code, paths and URLs ignored). `/french-guard off\|on\|status`. |
+| [`streak`](mods/streak) | Status line `🔥 5-day streak` (consecutive local days with a completed turn, kept across sessions); toast at 7/30/100/365 days. `/streak` for current, longest, total. |
+| [`achievement`](mods/achievement) | 11 playful badges unlocked once ever (First Blood, Centurion, Wordsmith, Night Owl, Early Bird, Marathon, Subagent Wrangler, Green Light, Persistent, Shipper, Clean Slate) with a 🏆 toast. `/achievements [reset]`. |
+| [`mood-band`](mods/mood-band) | Optional one-line mascot above the prompt whose mood follows the last turn (`(^‿^) Tout roule`, `(•_•;) Aïe`, `(-_-) zzz`…). Off by default: `/mood on\|off`. |
+| [`ascii-weather`](mods/ascii-weather) | Status line weather from wttr.in (`☀️ Paris +21°C`, metric), refreshed at most hourly; `location` option (empty = IP guess, shown without city). `/weather` for the one-line forecast. |
 
 ### Known limits
 - `main-guard` reads the command line word by word: it does not see through `bash -c "…"`, `$(…)`, `eval`, aliases or scripts, nor quoted text holding `;` or `|`. It is a seatbelt against accidental pushes, not a security boundary. The same goes for `rm-guard` and `secret-shield`.
@@ -42,6 +46,7 @@ A collection of Claude Code mods (plugins of function hooks).
 - `env-protect` matches file names only: `grep -r KEY .`, paths built from variables, scripts and symlinks are not seen. `path-fence` does not cover `sed -i`, `dd of=`, `curl -o`, `tar -C`, git writes or scripts, nor symlinks; the fence is the session folder, not the git root. Both ask through the permission system (see `rm-guard`). `deriveddata-janitor` never judges `/Volumes/…` workspaces (disk may be unmounted).
 - `network-log` classifies a Bash line by its first network segment; MCP "hosts" are server names. `release-checklist` passes a version if any `MARKETING_VERSION` in `project.yml` matches.
 - `session-journal` and `prompt-snippets` use `$.store` with read-modify-write (two sessions at once may lose an entry); turns started by a slash command may log `(no prompt)`. `french-guard` is a heuristic (stopword ratio, ~50 unaccented words). `focus-mode`/`done-sound`: a hot reload in the middle of a countdown/turn delays the end toast or skips the sound.
+- `achievement` detects failures from the Bash result's `isError`; Clean Slate accepts English, French and rtk-compacted `git status` output. `ascii-weather` is the only fun mod doing network calls (`curl wttr.in`, 5 s timeout, no retry before the hour).
 - `xcode-build-watch` only reacts to the main conversation's Edit/Write on `.swift` files inside the session folder (not Bash, not subagents/worktrees). A background build can overlap a manual `xcodebuild` on the same DerivedData.
 
 ## Use
