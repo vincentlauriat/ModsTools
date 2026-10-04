@@ -1,0 +1,6 @@
+{
+  "name": "doc-sync-guard",
+  "version": "0.1.0",
+  "description": "Warns above the prompt when a turn did not update COMMANDS.md, or changed code without updating CHANGES.md",
+  "types": "./types/index.d.ts"
+}
