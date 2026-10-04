@@ -1,0 +1,14 @@
+{
+  "name": "path-fence",
+  "version": "0.1.0",
+  "description": "Asks the user before Edit, Write, NotebookEdit or simple Bash redirections/mv/cp/rm touch a path outside the session folder",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "allowedRoots": {
+      "type": "string",
+      "title": "Extra allowed roots",
+      "description": "Comma-separated absolute folders (or ~/...) where writes never ask, besides the session folder, ~/.claude and the tmp dirs",
+      "default": ""
+    }
+  }
+}
