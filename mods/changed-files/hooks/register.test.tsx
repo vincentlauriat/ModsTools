@@ -34,3 +34,22 @@ test('failed or refused edits are not listed', async ($, on) => {
   expect(await ui.find({ type: 'Text', text: 'Nothing modified yet.' })).toBeDefined()
   await ui.unmount()
 })
+
+test('/changed-files clear empties the list and /changed-files close closes the pane', async ($, on) => {
+  const closed: string[] = []
+  on('session.cwd', () => ({ value: '/proj' }))
+  on('tool.call', () => ({ result: 'ok' as never }))
+  on('ui.close', ($e, e) => {
+    closed.push(e.id)
+    return { value: undefined }
+  })
+
+  await $.tool.call({ tool: 'Write', file_path: '/proj/a.ts', content: 'x' })
+  expect(((await $.command.run({ command: 'changed-files', args: 'clear' } as never)) as { text: string }).text).toBe('Changed files list cleared.')
+  const ui = await $.ui.mount({ plugin: 'changed-files', surface: 'terminal', ...PANE })
+  expect(await ui.find({ type: 'Text', text: '0 files changed' })).toBeDefined()
+  await ui.unmount()
+
+  await $.command.run({ command: 'changed-files', args: 'close' } as never)
+  expect(closed).toEqual(['changed-files'])
+})

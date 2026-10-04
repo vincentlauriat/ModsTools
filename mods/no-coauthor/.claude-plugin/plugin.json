@@ -1,0 +1,5 @@
+{
+  "name": "no-coauthor",
+  "version": "0.1.0",
+  "description": "Strips Co-Authored-By: Claude/Anthropic trailers from git commit messages before the commit runs"
+}

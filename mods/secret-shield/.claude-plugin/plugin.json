@@ -1,0 +1,6 @@
+{
+  "name": "secret-shield",
+  "version": "0.1.0",
+  "description": "Refuses Write, Edit and Bash calls that contain secret-looking values (API keys, tokens, private keys)",
+  "types": "./types/index.d.ts"
+}
