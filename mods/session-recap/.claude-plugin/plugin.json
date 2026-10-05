@@ -1,0 +1,11 @@
+{
+  "name": "session-recap",
+  "version": "0.1.0",
+  "description": "/recap: a pane (or copyable Markdown) summarising the session: duration, cost, files changed, commits, PRs and test/build runs",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "sparkle-guard",
+  "version": "0.1.0",
+  "description": "Protects the Sparkle EdDSA signing key: denies deleting it from the keychain, asks before generate_keys may create or import a key and before an edit changes an existing SUPublicEDKey",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

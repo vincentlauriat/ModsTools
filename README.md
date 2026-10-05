@@ -1,6 +1,6 @@
 # ModsTools
 
-A collection of 41 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
+A collection of 50 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
 
 Each mod lives in its own folder under [`mods/`](mods) with its own README, tests and manifest, and can be loaded on its own.
 
@@ -20,6 +20,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`probe-check`](mods/probe-check) | Toast on misleading verification probes: `$?` after a pipe, `git grep` that skipped untracked files |
 | [`branch-guard`](mods/branch-guard) | Asks before editing files while the repo is on `main`/`master` (once per repo per session) |
 | [`commit-lint`](mods/commit-lint) | Refuses `git commit` messages that are not Conventional Commits |
+| [`sparkle-guard`](mods/sparkle-guard) | Refuses deleting the Sparkle signing key from the keychain; asks before `generate_keys` could create a new key or an edit changes `SUPublicEDKey` |
 | [`doc-sync-guard`](mods/doc-sync-guard) | Band + toast when a turn did not update `COMMANDS.md`, or changed code without `CHANGES.md` |
 
 ### Session insight — see what is happening
@@ -37,6 +38,9 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`context-gauge`](mods/context-gauge) | Band once the context window is ≥ 70 % full |
 | [`cost-meter`](mods/cost-meter) | Status line with session cost and rate-limit usage, threshold toast |
 | [`rtk-gain`](mods/rtk-gain) | Status line with RTK token savings |
+| [`session-recap`](mods/session-recap) | `/recap`: pane (or copyable Markdown) of the session: duration, cost, files, commits, PRs, tests |
+| [`compact-advisor`](mods/compact-advisor) | Toast past a context threshold; `/compact-advisor` prints a ready-to-paste `/compact Keep: …` |
+| [`subagent-budget`](mods/subagent-budget) | Toast when a turn starts more subagents than the budget (default 10) |
 
 ### Productivity
 | Mod | What it does |
@@ -58,6 +62,9 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`worktree-pane`](mods/worktree-pane) | `/worktrees`: pane of git worktrees with their DerivedData; two-step Remove deletes both together |
 | [`deriveddata-janitor`](mods/deriveddata-janitor) | Finds orphan DerivedData folders (removed worktrees); `/deriveddata-janitor clean` |
 | [`release-checklist`](mods/release-checklist) | `/release-checklist [version]`: pre-release checks for a signed & notarized DMG |
+| [`xcodegen-sync`](mods/xcodegen-sync) | Band with a Run button when `project.yml` changes or Swift files are added/removed |
+| [`simulator-pane`](mods/simulator-pane) | `/simulators`: pane of booted simulators, two-step Shut down / Shut down all |
+| [`notary-watch`](mods/notary-watch) | Follows `notarytool submit` in the status line, toast on accepted / invalid |
 
 ### Fun
 | Mod | What it does |
@@ -66,6 +73,8 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`achievement`](mods/achievement) | 11 badges unlocked by real events, `/achievements` |
 | [`mood-band`](mods/mood-band) | Optional mascot band whose mood follows the last turn |
 | [`ascii-weather`](mods/ascii-weather) | Weather from wttr.in in the status line |
+| [`typing-stats`](mods/typing-stats) | `/typing-stats`: prompts per day and an hour-of-day histogram (never stores prompt text) |
+| [`haiku-commit`](mods/haiku-commit) | A haiku about each commit, as a toast (model-written, template fallback) |
 
 ## Install
 

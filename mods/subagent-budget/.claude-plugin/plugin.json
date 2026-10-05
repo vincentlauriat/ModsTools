@@ -1,0 +1,19 @@
+{
+  "name": "subagent-budget",
+  "version": "0.1.0",
+  "description": "Counts subagent spawns per turn and toasts once when a turn goes over budget; /subagent-budget shows the count, today's peak and the budget",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "max": {
+      "type": "number",
+      "title": "Subagents per turn",
+      "description": "Toast once per turn when more subagents than this are spawned",
+      "default": 10
+    }
+  }
+}
