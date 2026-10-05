@@ -2,6 +2,10 @@
   "name": "path-fence",
   "version": "0.1.0",
   "description": "Asks the user before Edit, Write, NotebookEdit or simple Bash redirections/mv/cp/rm touch a path outside the session folder",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts",
   "userConfig": {
     "allowedRoots": {

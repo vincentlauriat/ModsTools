@@ -24,7 +24,7 @@ const good: Inputs = {
   project: 'targets:\n  App:\n    settings:\n      base:\n        MARKETING_VERSION: "0.10.0"\n        X: "$(MARKETING_VERSION)"\n',
   release: RELEASE,
   gitignore: '# builds\n*.dmg\n',
-  identities: '1) ABC "Developer ID Application: Vincent LAURIAT (KFLACS69T9)"\n',
+  identities: '1) ABC "Developer ID Application: Jane Doe (ABCDE12345)"\n',
   porcelain: '',
   branch: 'feat/x\n',
   changes: '## 0.10.0\n- stuff',
@@ -63,6 +63,12 @@ describe('checks', () => {
   test('a fully good project passes every check', () => {
     expect(states(good)).toEqual(['ok', 'ok', 'ok', 'ok', 'ok', 'ok', 'ok'])
     expect(summary(runChecks(good))).toBe('7 checks, none failed')
+  })
+
+  test('the expected notary profile is configurable', () => {
+    const other = { ...good, release: RELEASE.replace('AppliMacVincentGithub', 'MyProfile') }
+    expect(runChecks(other, 'MyProfile')[1]?.state).toBe('ok')
+    expect(runChecks(good, 'MyProfile')[1]?.state).toBe('fail')
   })
 
   test('each broken input fails its own check', () => {

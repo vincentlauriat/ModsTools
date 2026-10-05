@@ -2,5 +2,9 @@
   "name": "turn-timer",
   "version": "0.1.0",
   "description": "A band above the prompt with the last turn's duration and tool calls; toasts on slow turns",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

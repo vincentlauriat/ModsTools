@@ -2,5 +2,9 @@
   "name": "agent-tracker",
   "version": "0.1.0",
   "description": "A pane listing the subagents launched this session with their status and duration",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

@@ -2,6 +2,10 @@
   "name": "ascii-weather",
   "version": "0.1.0",
   "description": "Weather from wttr.in in the status line (refreshed at most once an hour); /weather shows the one-line forecast",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "userConfig": {
     "location": {
       "type": "string",

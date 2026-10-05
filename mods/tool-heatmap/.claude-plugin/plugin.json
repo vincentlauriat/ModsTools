@@ -2,5 +2,9 @@
   "name": "tool-heatmap",
   "version": "0.1.0",
   "description": "A pane counting tool calls and failures per tool, main conversation and subagents together",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

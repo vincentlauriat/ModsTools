@@ -2,5 +2,17 @@
   "name": "release-checklist",
   "version": "0.1.0",
   "description": "A pane running pre-release checks for a macOS project and a post-release verification reminder",
-  "types": "./types/index.d.ts"
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "notaryProfile": {
+      "type": "string",
+      "title": "Notary keychain profile",
+      "description": "Expected default of NOTARY_PROFILE in Scripts/release.sh",
+      "default": "AppliMacVincentGithub"
+    }
+  }
 }

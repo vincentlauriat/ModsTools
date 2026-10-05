@@ -1,5 +1,9 @@
 {
   "name": "achievement",
   "version": "0.1.0",
-  "description": "Playful badges unlocked once ever from real events (tool calls, turns, subagents, tests, git); /achievements lists them"
+  "description": "Playful badges unlocked once ever from real events (tool calls, turns, subagents, tests, git); /achievements lists them",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  }
 }

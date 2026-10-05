@@ -1,5 +1,9 @@
 {
   "name": "streak",
   "version": "0.1.0",
-  "description": "Consecutive days with a completed turn, in the status line; toasts at 7, 30, 100 and 365 days; /streak summary"
+  "description": "Consecutive days with a completed turn, in the status line; toasts at 7, 30, 100 and 365 days; /streak summary",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  }
 }

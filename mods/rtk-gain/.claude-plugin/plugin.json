@@ -2,5 +2,9 @@
   "name": "rtk-gain",
   "version": "0.1.0",
   "description": "A status line entry with the tokens RTK saved, refreshed at session start and at most every 5 minutes",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

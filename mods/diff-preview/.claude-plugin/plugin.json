@@ -2,5 +2,9 @@
   "name": "diff-preview",
   "version": "0.1.0",
   "description": "A pane showing git diff --stat and the untracked file count, refreshed after each turn",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

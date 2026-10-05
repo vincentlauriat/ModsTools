@@ -1,6 +1,6 @@
 import type { Check, CheckState } from '../types'
 
-export const NOTARY_PROFILE = 'AppliMacVincentGithub'
+export const DEFAULT_NOTARY_PROFILE = 'AppliMacVincentGithub'
 export const REMINDER =
   'Release done. Verify: spctl -a -t exec -vv <App>.app · xcrun stapler validate <dmg> · codesign --verify --deep --strict <App>.app'
 
@@ -36,7 +36,7 @@ export const hasDeveloperId = (output: string): boolean => output.includes('Deve
 const make = (label: string, state: CheckState, detail: string): Check => ({ label, state, detail })
 const pass = (ok: boolean) => (ok ? 'ok' : 'fail')
 
-export function runChecks(i: Inputs): Check[] {
+export function runChecks(i: Inputs, expectedProfile = DEFAULT_NOTARY_PROFILE): Check[] {
   const list: Check[] = []
 
   if (i.project === null) list.push(make('project.yml', 'fail', 'missing'))
@@ -56,7 +56,7 @@ export function runChecks(i: Inputs): Check[] {
     list.push(
       make(
         'release.sh',
-        pass(profile === NOTARY_PROFILE),
+        pass(profile === expectedProfile),
         profile === null ? 'no NOTARY_PROFILE default' : `NOTARY_PROFILE default ${profile}`,
       ),
     )

@@ -2,5 +2,9 @@
   "name": "context-gauge",
   "version": "0.1.0",
   "description": "A band above the prompt that appears when the context window is at least 70% full",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }
