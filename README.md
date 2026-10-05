@@ -16,10 +16,17 @@ A collection of Claude Code mods (plugins of function hooks).
 | [`turn-timer`](mods/turn-timer) | Band above the prompt: `⏱ last turn 42s · 12 tools`, Hide button, toast past 2 minutes. |
 | [`tool-heatmap`](mods/tool-heatmap) | Pane counting calls and failures per tool with bars. `/tool-heatmap`. |
 | [`todo-pane`](mods/todo-pane) | Pane showing `TODOS.md` headings and checkboxes; click to toggle (written back to the file). `/todos`. |
+| [`command-history`](mods/command-history) | Pane listing the main conversation's Bash commands: ✓ / ✗ exit code / denied / interrupted, duration, newest first (50 kept). `/command-history [close\|clear]`. |
+| [`diff-preview`](mods/diff-preview) | Pane with `git diff --stat` and the untracked-file count of the session folder, refreshed after each turn. `/diff-preview [refresh\|close]`. |
+| [`cost-meter`](mods/cost-meter) | Status line `$1.23 · 5h 42%` (session cost + most used rate-limit window); toast once past a threshold (`thresholdUsd` option, default $5). `/cost-meter` for the details. |
+| [`context-gauge`](mods/context-gauge) | Band above the prompt once the context window is ≥ 70% full (`Context 78% ▓▓▓▓▓▓▓▓░░ — consider /compact`), red from 90%. |
+| [`agent-tracker`](mods/agent-tracker) | Pane listing subagents (foreground and background): running ⏳ / done ✓ / failed ✗, duration. `/agent-tracker [close\|clear]`. |
+| [`rtk-gain`](mods/rtk-gain) | Status line with RTK's global token savings (`rtk −19.3M tok (50%)`), refreshed at most every 5 minutes. `/rtk-gain` for the full report. |
 
 ### Known limits
 - `main-guard` reads the command line word by word: it does not see through `bash -c "…"`, `$(…)`, `eval`, aliases or scripts, nor quoted text holding `;` or `|`. It is a seatbelt against accidental pushes, not a security boundary. The same goes for `rm-guard` and `secret-shield`.
 - `rm-guard` asks through the permission system: in `auto`/`bypassPermissions` mode the mode settles the question.
+- `command-history` reads the exit code from Bash's error text (`Exit code N`); `agent-tracker` keeps ⏳ for a subagent stopped without finishing its turn; `context-gauge` and `diff-preview` refresh at the end of a turn, not after `/compact` or a manual edit.
 - `xcode-build-watch` only reacts to the main conversation's Edit/Write on `.swift` files inside the session folder (not Bash, not subagents/worktrees). A background build can overlap a manual `xcodebuild` on the same DerivedData.
 
 ## Use

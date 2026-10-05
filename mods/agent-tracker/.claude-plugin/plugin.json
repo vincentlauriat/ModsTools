@@ -1,0 +1,6 @@
+{
+  "name": "agent-tracker",
+  "version": "0.1.0",
+  "description": "A pane listing the subagents launched this session with their status and duration",
+  "types": "./types/index.d.ts"
+}

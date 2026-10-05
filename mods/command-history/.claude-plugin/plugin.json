@@ -1,0 +1,6 @@
+{
+  "name": "command-history",
+  "version": "0.1.0",
+  "description": "A pane listing the Bash commands run this session with exit status and duration",
+  "types": "./types/index.d.ts"
+}

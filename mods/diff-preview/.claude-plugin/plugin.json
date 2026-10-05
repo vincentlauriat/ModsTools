@@ -1,0 +1,6 @@
+{
+  "name": "diff-preview",
+  "version": "0.1.0",
+  "description": "A pane showing git diff --stat and the untracked file count, refreshed after each turn",
+  "types": "./types/index.d.ts"
+}
