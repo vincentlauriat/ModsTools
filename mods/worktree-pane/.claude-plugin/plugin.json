@@ -1,0 +1,11 @@
+{
+  "name": "worktree-pane",
+  "version": "0.1.0",
+  "description": "A pane listing the git worktrees of the session folder with branch, dirty count and DerivedData size, and removing a worktree together with its DerivedData",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}
