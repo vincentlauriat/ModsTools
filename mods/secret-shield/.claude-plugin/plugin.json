@@ -6,5 +6,6 @@
     "name": "Vincent Lauriat",
     "url": "https://github.com/vincentlauriat"
   },
+  "license": "MIT",
   "types": "./types/index.d.ts"
 }
