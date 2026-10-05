@@ -1,0 +1,10 @@
+{
+  "name": "probe-check",
+  "version": "0.1.0",
+  "description": "Toasts when a Bash verification probe is misleading: $? read after a pipeline, grep used as proof of absence, git grep ignoring untracked files",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

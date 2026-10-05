@@ -1,0 +1,11 @@
+{
+  "name": "flaky-detector",
+  "version": "0.1.0",
+  "description": "Spots test commands that failed then passed with no code edit in between, toasts once per command and lists them in a pane",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

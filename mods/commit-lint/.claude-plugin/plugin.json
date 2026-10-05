@@ -1,0 +1,19 @@
+{
+  "name": "commit-lint",
+  "version": "0.1.0",
+  "description": "Refuses git commit commands whose message subject is not a Conventional Commit (type(scope)!: subject, header within a length limit)",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "maxHeader": {
+      "type": "number",
+      "title": "Max header length",
+      "description": "Longest allowed first line of a commit message",
+      "default": 100
+    }
+  }
+}
