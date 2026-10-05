@@ -2,5 +2,9 @@
   "name": "main-guard",
   "version": "0.1.0",
   "description": "Refuses git pushes to main/master, force pushes, tag creation and GitHub releases unless the person allows them",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

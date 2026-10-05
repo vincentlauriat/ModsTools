@@ -2,5 +2,9 @@
   "name": "je-coupe",
   "version": "0.1.0",
   "description": "End-of-session ritual: typing 'je coupe' asks Claude to update the doc files and shows a band of the ones still untouched",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

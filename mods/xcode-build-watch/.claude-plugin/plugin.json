@@ -2,5 +2,9 @@
   "name": "xcode-build-watch",
   "version": "0.1.0",
   "description": "Builds the Xcode project or Swift package in the background after a turn edits Swift files, and shows the result in the status line",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

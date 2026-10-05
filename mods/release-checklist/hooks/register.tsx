@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
 import type { Report } from '../types'
-import { REMINDER, isReleaseRun, row, runChecks, summary } from './checks'
+import { DEFAULT_NOTARY_PROFILE, REMINDER, isReleaseRun, row, runChecks, summary } from './checks'
 import type { Inputs } from './checks'
 
 const PANE = 'release-checklist'
@@ -41,7 +41,10 @@ async function gather($: EngineInterface, version: string): Promise<Inputs> {
   }
 }
 
-export const register: Register = on => {
+export const register: Register = (on, options) => {
+  const profile =
+    typeof options?.notaryProfile === 'string' && options.notaryProfile.trim() !== '' ? options.notaryProfile.trim() : DEFAULT_NOTARY_PROFILE
+
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'release-checklist',
@@ -57,7 +60,7 @@ export const register: Register = on => {
       await $.ui.close({ id: PANE })
       return { text: 'Release checklist closed.' }
     }
-    const next: Report = { version: arg, checks: runChecks(await gather($, arg)) }
+    const next: Report = { version: arg, checks: runChecks(await gather($, arg), profile) }
     await update($, report, () => next)
     await $.ui.open({ id: PANE, title: TITLE })
 

@@ -2,5 +2,9 @@
   "name": "env-protect",
   "version": "0.1.0",
   "description": "Asks the user before Claude reads secret files (.env, private keys, .netrc, .npmrc, .aws/credentials, keychains…) with Read, Grep, Glob or Bash",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

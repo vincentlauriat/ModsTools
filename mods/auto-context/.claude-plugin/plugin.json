@@ -2,5 +2,9 @@
   "name": "auto-context",
   "version": "0.1.0",
   "description": "Adds git branch, dirty count, last commit and next TODOS to the session's system prompt",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

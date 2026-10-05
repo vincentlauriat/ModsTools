@@ -2,5 +2,9 @@
   "name": "network-log",
   "version": "0.1.0",
   "description": "A pane listing the network activity of the session: web fetches, searches, MCP calls and network Bash commands",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

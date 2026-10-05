@@ -2,5 +2,9 @@
   "name": "session-journal",
   "version": "0.1.0",
   "description": "A cross-session journal of turns per project, shown with /journal",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

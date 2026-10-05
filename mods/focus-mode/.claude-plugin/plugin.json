@@ -2,5 +2,9 @@
   "name": "focus-mode",
   "version": "0.1.0",
   "description": "A pomodoro: /focus [minutes] starts it, a band above the prompt counts down, a toast ends it",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }

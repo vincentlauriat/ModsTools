@@ -2,6 +2,10 @@
   "name": "cost-meter",
   "version": "0.1.0",
   "description": "Session cost and rate-limit usage in the status line; toasts when the cost crosses a threshold; /cost-meter summary",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "userConfig": {
     "thresholdUsd": {
       "type": "number",

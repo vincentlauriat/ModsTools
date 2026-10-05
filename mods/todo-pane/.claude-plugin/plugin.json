@@ -2,5 +2,9 @@
   "name": "todo-pane",
   "version": "0.1.0",
   "description": "A pane listing the checkboxes of the folder's TODOS.md, toggled with a press",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
   "types": "./types/index.d.ts"
 }
