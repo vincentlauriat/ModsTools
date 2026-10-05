@@ -76,3 +76,7 @@ The guards parse command lines word by word: they do not see through `bash -c "â
 ## Develop
 
 See [DEVELOPING.md](DEVELOPING.md).
+
+## License
+
+[MIT](LICENSE)
