@@ -1,0 +1,10 @@
+{
+  "name": "pr-status",
+  "version": "0.1.0",
+  "description": "A status line for the current branch's pull request: checks, review decision and merge state, refreshed after pushes and PR commands",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

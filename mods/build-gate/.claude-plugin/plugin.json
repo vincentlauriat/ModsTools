@@ -1,0 +1,11 @@
+{
+  "name": "build-gate",
+  "version": "0.1.0",
+  "description": "Band above the prompt when a turn changed source code without running a matching build or type-check",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

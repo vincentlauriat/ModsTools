@@ -1,6 +1,6 @@
 # ModsTools
 
-A collection of 35 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
+A collection of 41 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
 
 Each mod lives in its own folder under [`mods/`](mods) with its own README, tests and manifest, and can be loaded on its own.
 
@@ -16,6 +16,10 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`path-fence`](mods/path-fence) | Asks before writes outside the session folder (configurable allowed roots) |
 | [`no-coauthor`](mods/no-coauthor) | Strips `Co-Authored-By: Claude…` trailers from `git commit` commands |
 | [`verify-before-claim`](mods/verify-before-claim) | Toast + band when an answer claims success in a turn that changed code without running a build or test |
+| [`build-gate`](mods/build-gate) | Band when a turn changed source code without running a matching build or type-check |
+| [`probe-check`](mods/probe-check) | Toast on misleading verification probes: `$?` after a pipe, `git grep` that skipped untracked files |
+| [`branch-guard`](mods/branch-guard) | Asks before editing files while the repo is on `main`/`master` (once per repo per session) |
+| [`commit-lint`](mods/commit-lint) | Refuses `git commit` messages that are not Conventional Commits |
 | [`doc-sync-guard`](mods/doc-sync-guard) | Band + toast when a turn did not update `COMMANDS.md`, or changed code without `CHANGES.md` |
 
 ### Session insight — see what is happening
@@ -27,6 +31,8 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`tool-heatmap`](mods/tool-heatmap) | Pane counting calls and failures per tool |
 | [`agent-tracker`](mods/agent-tracker) | Pane of subagents: running / done / failed, duration |
 | [`network-log`](mods/network-log) | Pane of network activity: WebFetch, WebSearch, MCP, network Bash commands |
+| [`flaky-detector`](mods/flaky-detector) | Pane of test commands that failed then passed with no code change |
+| [`pr-status`](mods/pr-status) | Status line with the current branch's PR: checks, review, draft/merged |
 | [`turn-timer`](mods/turn-timer) | Band with the last turn's duration and tool count |
 | [`context-gauge`](mods/context-gauge) | Band once the context window is ≥ 70 % full |
 | [`cost-meter`](mods/cost-meter) | Status line with session cost and rate-limit usage, threshold toast |

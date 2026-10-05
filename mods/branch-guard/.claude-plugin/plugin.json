@@ -1,0 +1,19 @@
+{
+  "name": "branch-guard",
+  "version": "0.1.0",
+  "description": "Asks the user before Edit/Write/NotebookEdit changes a file of a git repo whose current branch is main or master (once per repo and session)",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "protectedBranches": {
+      "type": "string",
+      "title": "Protected branches",
+      "description": "Comma-separated branch names where editing a file asks first",
+      "default": "main,master"
+    }
+  }
+}
