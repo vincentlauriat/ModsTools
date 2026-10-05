@@ -1,0 +1,18 @@
+{
+  "name": "commit-size-guard",
+  "version": "0.1.0",
+  "description": "Asks before a git commit or git add includes large files, big binaries or build/release artifacts (dmg, zip, app, ipa, xcarchive, DerivedData, node_modules, .build, release/)",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "userConfig": {
+    "maxMB": {
+      "type": "number",
+      "title": "Max file size (MB)",
+      "description": "A committed or added file larger than this asks first",
+      "default": 5
+    }
+  }
+}

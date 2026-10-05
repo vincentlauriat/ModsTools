@@ -1,0 +1,11 @@
+{
+  "name": "edit-undo",
+  "version": "0.1.0",
+  "description": "Snapshots each file before Claude's Edit/Write/NotebookEdit and lets you undo the last change per file from a pane or /undo <path>, with a two-step confirm",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

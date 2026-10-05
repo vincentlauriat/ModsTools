@@ -1,6 +1,6 @@
 # ModsTools
 
-A collection of 50 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
+A collection of 56 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
 
 Each mod lives in its own folder under [`mods/`](mods) with its own README, tests and manifest, and can be loaded on its own.
 
@@ -21,6 +21,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`branch-guard`](mods/branch-guard) | Asks before editing files while the repo is on `main`/`master` (once per repo per session) |
 | [`commit-lint`](mods/commit-lint) | Refuses `git commit` messages that are not Conventional Commits |
 | [`sparkle-guard`](mods/sparkle-guard) | Refuses deleting the Sparkle signing key from the keychain; asks before `generate_keys` could create a new key or an edit changes `SUPublicEDKey` |
+| [`commit-size-guard`](mods/commit-size-guard) | Asks before committing or adding large files, binaries or build artifacts (`*.dmg`, `DerivedData/`, `node_modules/`…) |
 | [`doc-sync-guard`](mods/doc-sync-guard) | Band + toast when a turn did not update `COMMANDS.md`, or changed code without `CHANGES.md` |
 
 ### Session insight — see what is happening
@@ -41,6 +42,9 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`session-recap`](mods/session-recap) | `/recap`: pane (or copyable Markdown) of the session: duration, cost, files, commits, PRs, tests |
 | [`compact-advisor`](mods/compact-advisor) | Toast past a context threshold; `/compact-advisor` prints a ready-to-paste `/compact Keep: …` |
 | [`subagent-budget`](mods/subagent-budget) | Toast when a turn starts more subagents than the budget (default 10) |
+| [`ci-watch`](mods/ci-watch) | After `git push`, follows that commit's GitHub Actions runs in the status line; toast with the failed run's URL |
+| [`lint-watch`](mods/lint-watch) | Lints the files Claude edits (swiftlint / eslint / ruff / shellcheck when available); status line + pane |
+| [`port-pane`](mods/port-pane) | `/ports`: local TCP listeners, two-step Stop for dev servers started this session |
 
 ### Productivity
 | Mod | What it does |
@@ -54,6 +58,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`focus-mode`](mods/focus-mode) | Pomodoro countdown band: `/focus [minutes]` |
 | [`done-sound`](mods/done-sound) | Chime when a long turn completes |
 | [`french-guard`](mods/french-guard) | Toast when an answer looks English or lacks French accents |
+| [`edit-undo`](mods/edit-undo) | Snapshots files before each edit; `/undo` restores them (two-step, refuses if the file changed since) |
 
 ### macOS & Xcode
 | Mod | What it does |
@@ -64,7 +69,8 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`release-checklist`](mods/release-checklist) | `/release-checklist [version]`: pre-release checks for a signed & notarized DMG |
 | [`xcodegen-sync`](mods/xcodegen-sync) | Band with a Run button when `project.yml` changes or Swift files are added/removed |
 | [`simulator-pane`](mods/simulator-pane) | `/simulators`: pane of booted simulators, two-step Shut down / Shut down all |
-| [`notary-watch`](mods/notary-watch) | Follows `notarytool submit` in the status line, toast on accepted / invalid |
+| [`notary-watch`](mods/notary-watch) | Follows `notarytool submit` — typed directly or run by a release script — in the status line, toast on accepted / invalid |
+| [`xcstrings-check`](mods/xcstrings-check) | Missing / needs-review translations in Xcode String Catalogs, status line + `/xcstrings` pane |
 
 ### Fun
 | Mod | What it does |

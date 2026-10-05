@@ -209,3 +209,167 @@ export function age(ms: number): string {
 
   return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`
 }
+
+// ── Release scripts ──────────────────────────────────────────────────────────
+
+export type ScriptCall = {
+  // The script's path as the session can read it (a `cd x &&` before it applied), or null when unknown.
+  path: string | null
+  name: string
+  // `VAR=value` assignments written before the script on the command line (literal values only).
+  env: Record<string, string>
+}
+
+const INTERPRETERS = new Set(['bash', 'sh', 'zsh', 'dash', 'ksh', 'source', '.'])
+const SCRIPT_EXT = /\.(?:sh|bash|zsh|command)$/i
+const ASSIGNMENT = /^([A-Za-z_][A-Za-z0-9_]*)=([\s\S]*)$/
+
+function joinPath(dir: string | null, path: string): string | null {
+  if (path.startsWith('/')) return path
+  if (dir === null || path.startsWith('~')) return null
+
+  return dir === '' ? path : `${dir.replace(/\/+$/, '')}/${path}`
+}
+
+// The release script a command runs, in command position only: the command itself when it is a path
+// (`./Scripts/release.sh`, `Scripts/release.sh`, `release.sh`) or the script given to bash/sh/zsh/source/.
+// Its basename must contain `pattern` (case-insensitive); an empty pattern turns this off.
+export function scriptCall(command: string, pattern: string): ScriptCall | null {
+  const needle = pattern.trim().toLowerCase()
+  if (needle === '') return null
+  let dir: string | null = ''
+  for (const words of simpleCommands(command)) {
+    const env: Record<string, string> = {}
+    let i = 0
+    for (; i < words.length; i += 1) {
+      const assignment = ASSIGNMENT.exec(words[i]!.text)
+      if (assignment !== null) {
+        if (!words[i]!.expands) env[assignment[1]!] = assignment[2]!
+      } else if (!PREFIXES.has(baseName(words[i]!.text))) break
+    }
+    const head = words[i]
+    if (head === undefined) continue
+    if (head.text === 'cd' || head.text === 'pushd') {
+      const target = words[i + 1]
+      dir = target === undefined || target.expands || target.text === '-' ? null : joinPath(dir, target.text)
+      continue
+    }
+    let candidate: Token | undefined
+    if (INTERPRETERS.has(baseName(head.text))) {
+      let j = i + 1
+      while (j < words.length && words[j]!.text.startsWith('-')) j += 1
+      candidate = words[j]
+    } else if (head.text.includes('/') || SCRIPT_EXT.test(head.text)) candidate = head
+    if (candidate === undefined || candidate.expands) continue
+    const name = baseName(candidate.text)
+    if (name.toLowerCase().includes(needle)) return { path: joinPath(dir, candidate.text), name, env }
+  }
+
+  return null
+}
+
+const VALUE = `("[^"\\n]*"|'[^'\\n]*'|[^\\s;&|)]+)`
+
+// The script without its comments: a header comment may name another profile than the code uses.
+function withoutComments(text: string): string {
+  return text
+    .split('\n')
+    .map(line => (line.trimStart().startsWith('#') ? '' : line.replace(/\s#.*$/, '')))
+    .join('\n')
+}
+
+function unquote(raw: string): { text: string; literal: boolean } {
+  if (raw.length >= 2 && raw.startsWith("'") && raw.endsWith("'")) return { text: raw.slice(1, -1), literal: true }
+  const text = raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"') ? raw.slice(1, -1) : raw
+
+  return { text, literal: !/[$`]/.test(text) }
+}
+
+const validProfile = (value: string) => (value.trim() !== '' && !/[$`\\"'\n]/.test(value) ? value.trim() : null)
+
+// `${VAR:-default}`, `${VAR-default}`, `${VAR}` or `$VAR`: the variable and its literal default.
+function reference(text: string): { name: string; fallback: string | null } | null {
+  const match = /^\$\{?([A-Za-z_][A-Za-z0-9_]*)(?::?-([^}]*))?\}?$/.exec(text)
+  if (match === null) return null
+
+  return { name: match[1]!, fallback: match[2] === undefined ? null : validProfile(match[2]) }
+}
+
+// The value a variable takes in the script: the command line's own assignment first, then the
+// script's first assignment whose value is a literal or a `${VAR:-literal}` default.
+function variable(name: string, text: string, env: Record<string, string>): string | null {
+  if (env[name] !== undefined) return validProfile(env[name])
+  const assignments = new RegExp(`(?:^|[\\s;&(])(?:(?:export|readonly|local|declare(?:\\s+-[A-Za-z]+)*)\\s+)?${name}=${VALUE}`, 'gm')
+  for (const match of text.matchAll(assignments)) {
+    const value = unquote(match[1]!)
+    if (value.literal) return validProfile(value.text)
+    const ref = reference(value.text)
+    if (ref === null) continue
+    const given = env[ref.name]
+    if (given !== undefined) return validProfile(given)
+    if (ref.fallback !== null) return ref.fallback
+  }
+
+  return null
+}
+
+function resolveValue(raw: string, text: string, env: Record<string, string>): string | null {
+  const value = unquote(raw)
+  if (value.literal) return validProfile(value.text)
+  const ref = reference(value.text)
+  if (ref === null) return null
+
+  const given = env[ref.name]
+
+  return given !== undefined ? validProfile(given) : (variable(ref.name, text, env) ?? ref.fallback)
+}
+
+// The notarytool keychain profile a release script uses, read from its text: the `--keychain-profile`
+// values (resolved through `VAR="${VAR:-name}"`-style defaults), else a `*PROFILE*="${…:-name}"` default.
+// Null when none is found, when one cannot be resolved, or when the script names several.
+export function scriptProfile(script: string, env: Record<string, string> = {}): string | null {
+  const text = withoutComments(script)
+  const found = new Set<string>()
+  let unresolved = false
+  for (const match of text.matchAll(new RegExp(`--keychain-profile(?:=|[ \\t]+)${VALUE}`, 'g'))) {
+    const value = resolveValue(match[1]!, text, env)
+    if (value === null) unresolved = true
+    else found.add(value)
+  }
+  if (unresolved || found.size > 1) return null
+  if (found.size === 1) return [...found][0]!
+  for (const match of text.matchAll(/([A-Za-z_][A-Za-z0-9_]*)=["']?\$\{([A-Za-z_][A-Za-z0-9_]*):?-([^}"'\s]+)\}/g)) {
+    if (match[1] !== match[2] || !/profile/i.test(match[1]!)) continue
+    const value = env[match[1]!] !== undefined ? validProfile(env[match[1]!]!) : validProfile(match[3]!)
+    if (value !== null) found.add(value)
+  }
+
+  return found.size === 1 ? [...found][0]! : null
+}
+
+export type HistoryEntry = { id: string; name: string | null; status: string; createdMs: number }
+
+// The submissions in `notarytool history --output-format json` (`{ "history": [ { createdDate, id, name,
+// status } ], "message" }`), or null when the output is not that JSON. A missing `history` is no submission.
+export function parseHistory(stdout: string): HistoryEntry[] | null {
+  const object = jsonObjects(stdout).find(value => Array.isArray(value.history) || typeof value.message === 'string')
+  if (object === undefined) return null
+  const entries: HistoryEntry[] = []
+  for (const item of Array.isArray(object.history) ? (object.history as unknown[]) : []) {
+    if (item === null || typeof item !== 'object') continue
+    const { id, name, status, createdDate } = item as Record<string, unknown>
+    if (typeof id !== 'string' || !new RegExp(`^${UUID.source}$`, 'i').test(id) || !isStatus(status) || typeof createdDate !== 'string') continue
+    const createdMs = Date.parse(createdDate)
+    if (Number.isNaN(createdMs)) continue
+    entries.push({ id, name: typeof name === 'string' ? name : null, status, createdMs })
+  }
+
+  return entries
+}
+
+export const HISTORY_SLACK_MS = 60_000
+
+// The submissions created since `sinceMs`, less a minute of slack for the clocks' drift, oldest first.
+export function newSubmissions(entries: HistoryEntry[], sinceMs: number): HistoryEntry[] {
+  return entries.filter(entry => entry.createdMs >= sinceMs - HISTORY_SLACK_MS).sort((a, b) => a.createdMs - b.createdMs)
+}

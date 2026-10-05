@@ -1,0 +1,11 @@
+{
+  "name": "lint-watch",
+  "version": "0.1.0",
+  "description": "Lints the files Claude just edited (SwiftLint, ESLint, Ruff, ShellCheck when available) in the background, with a status line count and a pane of issues",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

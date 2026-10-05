@@ -1,0 +1,19 @@
+{
+  "name": "port-pane",
+  "version": "0.1.0",
+  "description": "A pane listing the local TCP ports your processes listen on, marking those opened during the session, with two-step Stop and Force stop buttons",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "statusLine": {
+      "type": "boolean",
+      "title": "Status line",
+      "description": "Show \"🔌 N dev ports\" in the status line for ports opened during this session",
+      "default": true
+    }
+  }
+}

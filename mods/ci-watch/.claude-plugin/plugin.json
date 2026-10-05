@@ -1,0 +1,10 @@
+{
+  "name": "ci-watch",
+  "version": "0.1.0",
+  "description": "Follows the GitHub Actions runs of a commit after git push: status line while they run, toast with the failed workflows and their link when they end",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}
