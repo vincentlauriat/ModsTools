@@ -1,0 +1,6 @@
+{
+  "name": "mood-band",
+  "version": "0.1.0",
+  "description": "A one-line mascot band above the prompt whose mood reflects the last turn (off by default: /mood on|off)",
+  "types": "./types/index.d.ts"
+}
