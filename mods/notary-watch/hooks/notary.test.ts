@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { age, finalToast, parseInfo, parseOutput, parseSubmit, simpleCommands, statusLine } from './notary'
+import { age, finalToast, newSubmissions, parseHistory, parseInfo, parseOutput, parseSubmit, scriptCall, scriptProfile, simpleCommands, statusLine } from './notary'
 
 const ID = '2efe2717-52ef-43a5-96dc-0797e4ca1041'
 const ISSUER = '69a6de7e-1111-47e3-e053-5b8c7c11a4d1'
@@ -80,4 +80,70 @@ test('texts: toasts, status line, age', () => {
   expect(statusLine([{ id: ID }, { id: PATH_UUID }])).toBe('notary: 2 in progress')
   expect(age(5 * 60_000)).toBe('5 min')
   expect(age(125 * 60_000)).toBe('2h05')
+})
+
+test('scriptCall finds a release script in command position only (test bites)', () => {
+  expect(scriptCall('./Scripts/release.sh 1.2.0', 'release')).toEqual({ path: './Scripts/release.sh', name: 'release.sh', env: {} })
+  expect(scriptCall('cd app && NOTARY_PROFILE=Other rtk Scripts/release-full.sh 2.0', 'release')).toEqual({ path: 'app/Scripts/release-full.sh', name: 'release-full.sh', env: { NOTARY_PROFILE: 'Other' } })
+  expect(scriptCall('bash -x /abs/Release.sh', 'release')?.path).toBe('/abs/Release.sh')
+  expect(scriptCall('sh release.sh', 'release')?.path).toBe('release.sh')
+  expect(scriptCall('release.sh', 'release')?.name).toBe('release.sh')
+  expect(scriptCall('cd "$DIR" && ./release.sh', 'release')).toEqual({ path: null, name: 'release.sh', env: {} })
+  // Not a script run: a directory, an argument, a reader, another tool, a plain word.
+  expect(scriptCall('cd release && rtk xcrun notarytool submit release/App.zip -p P', 'release')).toBeNull()
+  expect(scriptCall('echo Scripts/release.sh', 'release')).toBeNull()
+  expect(scriptCall('cat Scripts/release.sh | head', 'release')).toBeNull()
+  expect(scriptCall('gh release create v1.2.0', 'release')).toBeNull()
+  expect(scriptCall('git commit -m "release 1.2"', 'release')).toBeNull()
+  expect(scriptCall('./Scripts/build.sh', 'release')).toBeNull()
+  // The pattern is configurable; empty turns it off.
+  expect(scriptCall('./Scripts/build.sh', 'build')?.name).toBe('build.sh')
+  expect(scriptCall('./Scripts/release.sh', '  ')).toBeNull()
+})
+
+test('scriptProfile reads the code, not the comments, and resolves shell defaults', () => {
+  const script = [
+    '#!/bin/bash',
+    '# Usage: NOTARY_PROFILE=OldDocumentedProfile ./release.sh <version>',
+    'NOTARY_PROFILE="${NOTARY_PROFILE:-MyNotaryProfile}"',
+    'xcrun notarytool submit "$DMG" --keychain-profile "$NOTARY_PROFILE" --wait',
+  ].join('\n')
+  expect(scriptProfile(script)).toBe('MyNotaryProfile')
+  expect(scriptProfile(script, { NOTARY_PROFILE: 'Other' })).toBe('Other')
+  expect(scriptProfile('xcrun notarytool submit a.zip --keychain-profile MyNotaryProfile')).toBe('MyNotaryProfile')
+  expect(scriptProfile("xcrun notarytool submit a.zip --keychain-profile='My Profile'")).toBe('My Profile')
+  expect(scriptProfile('PROFILE=MyNotaryProfile\nxcrun notarytool submit a --keychain-profile "${PROFILE}"')).toBe('MyNotaryProfile')
+  expect(scriptProfile('xcrun notarytool submit a --keychain-profile "${P:-MyNotaryProfile}"')).toBe('MyNotaryProfile')
+  // A default alone, with no --keychain-profile written out (passed through an array, say).
+  expect(scriptProfile('export NOTARY_PROFILE="${NOTARY_PROFILE:-MyNotaryProfile}"\nARGS=(-p "$NOTARY_PROFILE")')).toBe('MyNotaryProfile')
+  // Unknown: unresolvable, several different ones, none at all, `mkdir -p` never read as a profile.
+  expect(scriptProfile('xcrun notarytool submit a --keychain-profile "$1"')).toBeNull()
+  expect(scriptProfile('notarytool submit a --keychain-profile One\nnotarytool submit b --keychain-profile Two')).toBeNull()
+  expect(scriptProfile('mkdir -p release\nxcrun notarytool submit a --apple-id x')).toBeNull()
+  expect(scriptProfile('# --keychain-profile Commented\necho hi')).toBeNull()
+})
+
+const H1 = '11111111-2222-4333-8444-555555555555'
+test('parseHistory reads notarytool history JSON; newSubmissions keeps those since the start, less 60s (test bites)', () => {
+  const at = (ms: number) => new Date(ms).toISOString()
+  const json = JSON.stringify({
+    history: [
+      { createdDate: at(1_000_000), id: ID, name: 'App.dmg', status: 'In Progress' },
+      { createdDate: at(1_000_000 - 59_000), id: H1, name: 'App.zip', status: 'Accepted' },
+      { createdDate: at(1_000_000 - 61_000), id: PATH_UUID, name: 'Old.zip', status: 'Invalid' },
+      { createdDate: 'not a date', id: ISSUER, name: 'x', status: 'Accepted' },
+      { createdDate: at(1_000_000), id: 'not-a-uuid', name: 'x', status: 'Accepted' },
+    ],
+    message: 'Successfully received submission history.',
+  })
+  const entries = parseHistory(json)
+  expect(entries?.map(e => e.id)).toEqual([ID, H1, PATH_UUID])
+  expect(newSubmissions(entries!, 1_000_000).map(e => [e.id, e.name, e.status])).toEqual([
+    [H1, 'App.zip', 'Accepted'],
+    [ID, 'App.dmg', 'In Progress'],
+  ])
+  // notarytool writes dates as yyyy-MM-dd'T'HH:mm:ss'Z', with or without .SSS: UTC either way.
+  expect(parseHistory(JSON.stringify({ history: [{ createdDate: '2026-01-01T00:00:00Z', id: ID, name: 'a', status: 'Accepted' }] }))?.[0]?.createdMs).toBe(Date.UTC(2026, 0, 1))
+  expect(parseHistory('{"message":"No submission history."}')).toEqual([])
+  expect(parseHistory('Error: No Keychain password item found')).toBeNull()
 })

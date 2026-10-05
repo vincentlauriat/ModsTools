@@ -1,0 +1,19 @@
+{
+  "name": "xcstrings-check",
+  "version": "0.1.0",
+  "description": "Checks Xcode String Catalogs (.xcstrings) after Claude edits them or Swift files beside them: missing translations, new or needs-review states and stale entries per language",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "languages": {
+      "type": "string",
+      "title": "Expected languages",
+      "description": "Comma-separated language codes every catalog must cover, besides those already in it (e.g. fr,de)",
+      "default": ""
+    }
+  }
+}

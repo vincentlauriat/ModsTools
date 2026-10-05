@@ -1,10 +1,24 @@
 {
   "name": "notary-watch",
   "version": "0.1.0",
-  "description": "Follows Apple notarization submissions made with xcrun notarytool submit: status line while in progress, toast when accepted or invalid",
+  "description": "Follows Apple notarization submissions made with xcrun notarytool submit, directly or from a release script: status line while in progress, toast when accepted or invalid",
   "author": {
     "name": "Vincent Lauriat",
     "url": "https://github.com/vincentlauriat"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "userConfig": {
+    "scriptPattern": {
+      "type": "string",
+      "title": "Release script pattern",
+      "description": "A main-agent Bash command that runs a script whose file name contains this text (e.g. Scripts/release.sh) is followed through notarytool history; empty turns it off",
+      "default": "release"
+    },
+    "keychainProfile": {
+      "type": "string",
+      "title": "Keychain profile",
+      "description": "The notarytool keychain profile to query history with; empty reads it from the script",
+      "default": ""
+    }
+  }
 }
