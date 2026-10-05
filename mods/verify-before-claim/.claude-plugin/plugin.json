@@ -1,0 +1,11 @@
+{
+  "name": "verify-before-claim",
+  "version": "0.1.0",
+  "description": "Warns when a turn changed code and claimed success without running a build, test or lint",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

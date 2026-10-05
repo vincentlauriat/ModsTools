@@ -1,0 +1,11 @@
+{
+  "name": "resume-brief",
+  "version": "0.1.0",
+  "description": "Adds a short 'where we left off' brief (last journal entries, memory state, in-progress plan phase) to the session's system prompt",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

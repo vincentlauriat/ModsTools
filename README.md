@@ -1,6 +1,6 @@
 # ModsTools
 
-A collection of 32 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
+A collection of 35 **Claude Code mods**: small plugins of function hooks that add panes, bands above the prompt, status-line entries, toasts, slash commands and tool-call guards to Claude Code (terminal and desktop Code tab).
 
 Each mod lives in its own folder under [`mods/`](mods) with its own README, tests and manifest, and can be loaded on its own.
 
@@ -15,6 +15,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`env-protect`](mods/env-protect) | Asks before reading secret files (`.env*`, keys, `.netrc`, `.aws/credentials`…) |
 | [`path-fence`](mods/path-fence) | Asks before writes outside the session folder (configurable allowed roots) |
 | [`no-coauthor`](mods/no-coauthor) | Strips `Co-Authored-By: Claude…` trailers from `git commit` commands |
+| [`verify-before-claim`](mods/verify-before-claim) | Toast + band when an answer claims success in a turn that changed code without running a build or test |
 | [`doc-sync-guard`](mods/doc-sync-guard) | Band + toast when a turn did not update `COMMANDS.md`, or changed code without `CHANGES.md` |
 
 ### Session insight — see what is happening
@@ -37,6 +38,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | [`todo-pane`](mods/todo-pane) | Pane of `TODOS.md` checkboxes, toggled by click |
 | [`prompt-snippets`](mods/prompt-snippets) | Reusable prompt fragments: `/snip add`, `;;name` expanded in prompts |
 | [`auto-context`](mods/auto-context) | Adds git state and open TODOs to the system prompt |
+| [`resume-brief`](mods/resume-brief) | Adds a "where we left off" brief (last journal entries, state, in-progress plan) to the system prompt |
 | [`session-journal`](mods/session-journal) | Cross-session journal of turns: `/journal [yesterday\|week]` |
 | [`je-coupe`](mods/je-coupe) | End-of-session ritual: "je coupe" asks to bring every project doc up to date |
 | [`focus-mode`](mods/focus-mode) | Pomodoro countdown band: `/focus [minutes]` |
@@ -47,6 +49,7 @@ Each mod lives in its own folder under [`mods/`](mods) with its own README, test
 | Mod | What it does |
 |---|---|
 | [`xcode-build-watch`](mods/xcode-build-watch) | Background Xcode / SwiftPM build after Swift edits, result in the status line |
+| [`worktree-pane`](mods/worktree-pane) | `/worktrees`: pane of git worktrees with their DerivedData; two-step Remove deletes both together |
 | [`deriveddata-janitor`](mods/deriveddata-janitor) | Finds orphan DerivedData folders (removed worktrees); `/deriveddata-janitor clean` |
 | [`release-checklist`](mods/release-checklist) | `/release-checklist [version]`: pre-release checks for a signed & notarized DMG |
 
