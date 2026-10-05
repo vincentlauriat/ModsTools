@@ -1,0 +1,6 @@
+{
+  "name": "session-journal",
+  "version": "0.1.0",
+  "description": "A cross-session journal of turns per project, shown with /journal",
+  "types": "./types/index.d.ts"
+}

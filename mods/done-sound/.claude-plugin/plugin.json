@@ -1,0 +1,14 @@
+{
+  "name": "done-sound",
+  "version": "0.1.0",
+  "description": "Plays a short chime when a long main-agent turn completes; /done-sound off|on|test",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "minSeconds": {
+      "type": "number",
+      "title": "Minimum turn length (seconds)",
+      "description": "Play the chime only when a turn ran at least this long",
+      "default": 30
+    }
+  }
+}

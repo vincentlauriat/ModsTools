@@ -1,0 +1,5 @@
+{
+  "name": "prompt-snippets",
+  "version": "0.1.0",
+  "description": "Reusable prompt fragments kept across sessions: /snip add|rm|list|show, and ;;name expands in prompts"
+}
