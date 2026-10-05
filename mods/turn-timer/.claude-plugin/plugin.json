@@ -1,0 +1,6 @@
+{
+  "name": "turn-timer",
+  "version": "0.1.0",
+  "description": "A band above the prompt with the last turn's duration and tool calls; toasts on slow turns",
+  "types": "./types/index.d.ts"
+}

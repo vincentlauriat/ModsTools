@@ -1,0 +1,6 @@
+{
+  "name": "rm-guard",
+  "version": "0.1.0",
+  "description": "Asks the user before destructive Bash commands run: rm -rf, git reset --hard, git clean -f, discarding all changes, SQL DROP/TRUNCATE, find -delete, mkfs, dd onto a device",
+  "types": "./types/index.d.ts"
+}

@@ -64,14 +64,23 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'changed-files',
-      description: 'Show the files modified in this session',
+      description: 'Show the files modified in this session (close | clear)',
     })
     void $.ui.open({ id: PANE, title: TITLE })
 
     return next(e)
   })
 
-  on('command.run', { command: 'changed-files' }, async $ => {
+  on('command.run', { command: 'changed-files' }, async ($, e) => {
+    const arg = e.args.trim()
+    if (arg === 'close' || arg === 'off') {
+      await $.ui.close({ id: PANE })
+      return { text: 'Changed files pane closed.' }
+    }
+    if (arg === 'clear') {
+      await update($, files, () => [])
+      return { text: 'Changed files list cleared.' }
+    }
     await $.ui.open({ id: PANE, title: TITLE })
     const count = (await read($, files)).length
 
