@@ -1,0 +1,5 @@
+{
+  "name": "deriveddata-janitor",
+  "version": "0.1.0",
+  "description": "Finds Xcode DerivedData folders whose workspace is gone (removed worktrees), shows them in a status line and cleans them on an explicit command"
+}
