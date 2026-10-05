@@ -1,0 +1,11 @@
+{
+  "name": "xcodegen-sync",
+  "version": "0.1.0",
+  "description": "A band reminding to run xcodegen generate after project.yml changes or Swift files are added, removed or moved, with a button that runs it",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "notary-watch",
+  "version": "0.1.0",
+  "description": "Follows Apple notarization submissions made with xcrun notarytool submit: status line while in progress, toast when accepted or invalid",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

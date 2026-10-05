@@ -1,0 +1,19 @@
+{
+  "name": "simulator-pane",
+  "version": "0.1.0",
+  "description": "A pane listing the booted iOS/watchOS/tvOS/visionOS simulators with two-step Shut down buttons, and an optional status line counting them",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "statusLine": {
+      "type": "boolean",
+      "title": "Status line",
+      "description": "Show \"📱 N booted\" in the status line while simulators are booted",
+      "default": true
+    }
+  }
+}

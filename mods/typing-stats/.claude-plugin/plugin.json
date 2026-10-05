@@ -1,0 +1,10 @@
+{
+  "name": "typing-stats",
+  "version": "0.1.0",
+  "description": "Counts your prompts per local day (count, characters, hour of day, never the text) and shows today, the last 7 days and an hour histogram with /typing-stats",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

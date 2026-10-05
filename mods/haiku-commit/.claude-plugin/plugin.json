@@ -1,0 +1,10 @@
+{
+  "name": "haiku-commit",
+  "version": "0.1.0",
+  "description": "After each successful git commit, toasts a 5-7-5 haiku about it (written by a small model, or from templates when the model is unavailable); /haiku-commit re-shows the last one",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT"
+}

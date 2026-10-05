@@ -1,0 +1,19 @@
+{
+  "name": "compact-advisor",
+  "version": "0.1.0",
+  "description": "Toasts once when the context crosses a threshold; /compact-advisor prints a ready-to-paste /compact line with branch, edited files, open tasks and the last goal",
+  "author": {
+    "name": "Vincent Lauriat",
+    "url": "https://github.com/vincentlauriat"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "threshold": {
+      "type": "number",
+      "title": "Context threshold (%)",
+      "description": "Toast once when the context window crosses this percentage; re-armed below threshold - 10",
+      "default": 85
+    }
+  }
+}
